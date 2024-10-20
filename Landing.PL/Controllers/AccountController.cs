@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -50,39 +50,48 @@ public class AccountController : Controller
         return View();
     }
 
-    // POST: /Account/Login
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model)
-    {
-        if (ModelState.IsValid)
-        {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-            if (result.Succeeded)
-            {
-                // Get the user object to check their role
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
-                {
-                    if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        return RedirectToAction("Index", "Dashboard");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-            }
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        }
+	// POST: /Account/Login
+	[HttpPost]
+	[ValidateAntiForgeryToken]
+	public async Task<IActionResult> Login(LoginViewModel model)
+	{
+		if (ModelState.IsValid)
+		{
+			var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+			if (result.Succeeded)
+			{
+				// Get the user object to check their role
+				var user = await _userManager.FindByEmailAsync(model.Email);
+				if (user != null)
+				{
+					// Check user roles
+					if (await _userManager.IsInRoleAsync(user, "Admin"))
+					{
+						// Redirect to Dashboard/Dashboard for Admin
+						return RedirectToAction("Dashboard", "Dashboard");
+					}
+					else if (await _userManager.IsInRoleAsync(user, "User"))
+					{
+						// Redirect to Home for regular User
+						return RedirectToAction("Index", "Home");
+					}
+					else
+					{
+						// Optional: Redirect to a default page for users without a specific role
+						return RedirectToAction("Index", "Home");
+					}
+				}
+			}
+			ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+		}
 
-        // If we got this far, something failed; redisplay form
-        return View(model);
-    }
+		// If we got this far, something failed; redisplay form
+		return View(model);
+	}
 
-    // POST: /Account/Logout
-    [HttpPost]
+
+	// POST: /Account/Logout
+	[HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
