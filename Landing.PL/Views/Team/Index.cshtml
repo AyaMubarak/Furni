@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Landing.PL.Areas.Dashboard.ViewModels.TeamFormVM>
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Team</h1>
+                    <p><a asp-controller="Shop" asp-action="Index" class="btn btn-secondary me-2">Shop Now</a>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="hero-img-wrap">
+                    <img src="~/images/couch.png" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="untree_co-section">
+    <div class="container-fluid">
+        <!-- Changed to container-fluid for full width -->
+
+        <div class="row mb-5">
+            <div class="col-lg-5 mx-auto text-center">
+                <h2 class="section-title">Our Team</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Start Team Members -->
+            @foreach (var per in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-3 mb-5">
+                    <div class="team-member text-center">
+                        <img src="~/files/images/@per.ImageName" class="img-fluid mb-4" alt="@per.Name">
+                        <h3><a href="#"><span class=""></span> @per.Name</a></h3>
+                        <p>
+                            @Html.Raw(@per.Description)
+                        </p>
+                    </div>
+                </div>
+            }
+            <!-- End Team Members -->
+        </div>
+    </div>
+</div>
+<!-- End Team Section -->

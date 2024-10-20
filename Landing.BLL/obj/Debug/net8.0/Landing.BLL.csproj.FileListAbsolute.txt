@@ -1,0 +1,16 @@
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\bin\Debug\net8.0\Landing.BLL.deps.json
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\bin\Debug\net8.0\Landing.BLL.dll
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\bin\Debug\net8.0\Landing.BLL.pdb
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\bin\Debug\net8.0\Landing.DAL.dll
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\bin\Debug\net8.0\Landing.DAL.pdb
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.csproj.AssemblyReference.cache
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.AssemblyInfoInputs.cache
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.AssemblyInfo.cs
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.csproj.CoreCompileInputs.cache
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.sourcelink.json
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing..40C54209.Up2Date
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.dll
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\refint\Landing.BLL.dll
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\Landing.BLL.pdb
+C:\Users\ayagm\Desktop\knowledge ackedemy\Landing\Landing.BLL\obj\Debug\net8.0\ref\Landing.BLL.dll

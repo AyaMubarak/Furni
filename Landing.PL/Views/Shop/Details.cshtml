@@ -1,0 +1,45 @@
+﻿@model Landing.PL.Areas.Dashboard.ViewModels.ShopFormVM
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Product Image Section with Buttons Below -->
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <div class="product-image-wrapper position-relative">
+                <img src="~/files/images/@Model.ImageName" alt="@Model.Name" class="img-fluid rounded" style="width: 100%; object-fit: cover; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
+                <!-- Optional badge or label -->
+                <span class="badge bg-success position-absolute" style="top: 20px; left: 20px; font-size: 1.2rem; padding: 10px 15px;">New</span>
+            </div>
+
+            <!-- Add to Cart and Back to Shop Buttons under Image -->
+            <div class="mt-4 d-flex flex-column w-100">
+                <!-- Add to Cart Button -->
+                <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-dark btn-lg w-100 py-3 mb-3" style="border-radius: 50px;">
+                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
+                    </button>
+                </form>
+                <!-- Back to Shop Button -->
+                <a asp-action="Index" asp-controller="Shop" class="btn btn-outline-secondary btn-lg w-100 py-3" style="border-radius: 50px;">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Shop
+                </a>
+            </div>
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="col-md-6 d-flex flex-column justify-content-start">
+            <div class="product-info">
+                <!-- Product Name -->
+                <h2 class="display-4 font-weight-bold text-dark mb-3">@Model.Name</h2>
+
+                <!-- Product Price in Green -->
+                <h4 class="text-success mb-4" style="font-size: 2rem;">$@Model.Price</h4>
+
+                <!-- Product Description -->
+                <p class="text-muted" style="line-height: 1.7; font-size: 1.1rem;margin-bottom:200px;">
+                    @Html.Raw(@Model.Description)
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

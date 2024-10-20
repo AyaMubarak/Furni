@@ -1,0 +1,99 @@
+﻿@model BlogFormVM
+
+@section Header {
+    Create Blogs
+}
+
+<div class="col-md-12">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Create Blogs</h3>
+        </div>
+        <form asp-action="Create" asp-controller="Blogs" enctype="multipart/form-data" method="post" id="BlogForm">
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="Name">Enter Blog Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter Blog Name" required />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+              
+                <div class="form-group">
+                    <label asp-for="CreatedBy">Enter Blog CreatedBy</label>
+                    <input asp-for="CreatedBy" class="form-control" placeholder="Enter Blog CreatedBy" required />
+                    <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description">Enter Blog Description</label>
+                    <textarea name="Description" id="editor" hidden></textarea>
+                    <div id="ck-editor" style="height: 200px;"></div>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CreatedAt">Enter Blog Created At</label>
+                    <input asp-for="CreatedAt" class="form-control" required />
+                    <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Image">Enter Blog Image</label>
+                    <input asp-for="Image" class="form-control-file imageInput" accept="image/*" required />
+                    <span asp-validation-for="Image" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <img src="#" alt="Image Preview" style="display: none; width: 100px;" id="imagePreview" />
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Script {
+    <!-- Include CKEditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize CKEditor
+            ClassicEditor
+                .create(document.querySelector('#ck-editor'))
+                .then(editor => {
+                    // Handle form submission
+                    document.getElementById('BlogForm').addEventListener('submit', function (event) {
+                        const descriptionContent = editor.getData(); // Get content from CKEditor
+                        document.querySelector("#editor").value = descriptionContent; // Update hidden input
+
+                        if (!descriptionContent.trim()) {
+                            alert('Description cannot be empty. Please enter a description.');
+                            event.preventDefault();
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            // Image preview functionality
+            document.querySelector(".imageInput").addEventListener("change", (event) => {
+                const file = event.target.files[0];
+                const imagePreview = document.querySelector("#imagePreview");
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = "none";
+                }
+            });
+        });
+    </script>
+}

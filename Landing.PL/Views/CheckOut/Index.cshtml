@@ -1,0 +1,51 @@
+﻿@model Landing.PL.Areas.Dashboard.ViewModels.OrderViewModel
+
+<div class="container">
+    <h2>Checkout</h2>
+
+    <form asp-action="CompleteCheckout" method="post">
+        <!-- Country Selection -->
+        <div class="form-group">
+            <label for="SelectedPlace">Country *</label>
+            <select  class="form-control" required>
+                <option value="">Select Country</option>
+                <option value="JO">Amman</option> 
+                <option value="JO">Albalqa</option> 
+                <option value="JO">Alkarak</option> 
+            </select>
+
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+            <label for="Name"> Name *</label>
+            <input asp-for="Name" class="form-control" placeholder="Last Name" required />
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Address -->
+        <div class="form-group">
+            <label for="Address">Address *</label>
+            <input asp-for="Address" class="form-control" placeholder="Street Address" required />
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label for="EmailAddress">Email Address *</label>
+            <input asp-for="EmailAddress" class="form-control" placeholder="Email Address" type="email" required />
+            @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+            <label for="Phone">Phone *</label>
+            <input asp-for="Phone" class="form-control" placeholder="Phone Number" type="tel" required />
+            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+        </div>
+
+      
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Place Order</button>
+    </form>
+</div>

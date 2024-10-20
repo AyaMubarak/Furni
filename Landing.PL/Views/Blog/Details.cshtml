@@ -1,0 +1,16 @@
+﻿@model Landing.PL.Areas.Dashboard.ViewModels.BlogFormVM
+
+<div class="container my-5">
+    <h1 class="text-center mb-4">@Model.Name</h1>
+    <div class="text-center mb-4">
+        <img src="~/files/images/@Model.ImageName" alt="@Model.Name" class="img-fluid rounded shadow">
+    </div>
+    <div class="meta text-center mb-3">
+        <span class="badge bg-info text-dark">By: @Model.CreatedBy</span> |
+        <span class="badge bg-light text-dark">Published on: @Model.CreatedAt.ToShortDateString()</span>
+    </div>
+    <p class="lead text-justify">@Html.Raw(@Model.Description)</p>
+    <div class="text-center">
+        <a asp-controller="Blog" asp-action="Index" class="btn btn-secondary">Back to Blog</a>
+    </div>
+</div>

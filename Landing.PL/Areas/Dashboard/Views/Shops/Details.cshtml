@@ -1,0 +1,20 @@
+﻿@model ShopDetailsVM
+@section Header {
+    Shop Details
+}
+<div class="col-md-12">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Details for @Model.Id</h3>
+        </div>
+        <ul>
+            <li>Descrption:@Html.Raw(@Model.Description)</li>
+            <li>Status:@(Model.ISDeleted ? "Deleted" : "Active")</li>
+            <img src="~/files/images/@Model.ImageName" with="100px;" />
+
+        </ul>
+    </div>
+
+
+
+</div>

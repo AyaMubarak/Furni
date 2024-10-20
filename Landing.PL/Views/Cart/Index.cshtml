@@ -1,0 +1,152 @@
+﻿@model IEnumerable<Landing.PL.Areas.Dashboard.ViewModels.CartItemViewModel>
+
+<div class="hero">
+    <div class="container">
+        <h1>Cart</h1>
+    </div>
+</div>
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <form class="col-md-12" method="post">
+            <div class="site-blocks-table">
+                <table class="table" id="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-body">
+                        @if (Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr data-id="@item.Id" class="cart-item">
+                                    <td>
+                                        <img src="~/files/images/@item.ImageName" alt="@item.Name" class="img-fluid" width="200px;" />
+                                    </td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Price.ToString("C")</td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            <button class="btn btn-outline-black decrease" type="button">&minus;</button>
+                                            <input class="quantity-input" style="width:50px; border:none;" name="quantities[@item.Id]" value="@item.Quantity" min="1" />
+                                            <button class="btn btn-outline-black increase" type="button">&plus;</button>
+                                        </div>
+                                    </td>
+                                    <td class="product-total" data-price="@item.Price">@((item.Price * item.Quantity).ToString("C"))</td>
+                                    <td>
+                                        <button class="btn btn-black btn-sm remove-item">X</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">Your cart is empty.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="@Url.Action("Index", "Shop")" class="btn btn-outline-black btn-sm btn-block">Continue Shopping</a>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h3>Cart Totals</h3>
+                    <div>Subtotal: <strong id="cart-subtotal">@Model.Sum(item => item.Price * item.Quantity).ToString("C")</strong></div>
+                    <div>Total: <strong id="cart-total">@Model.Sum(item => item.Price * item.Quantity).ToString("C")</strong></div>
+                    <a asp-controller="CheckOut" asp-action="Index" class="btn btn-black btn-lg py-3 btn-block">Proceed To Checkout</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        loadCart();
+
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const id = item.dataset.id;
+            const quantityInput = item.querySelector('.quantity-input');
+            const totalElement = item.querySelector('.product-total');
+
+            initializeLocalStorage(id, quantityInput.value);
+
+            item.querySelector('.increase').addEventListener('click', () => updateQuantity(id, quantityInput, totalElement, 1));
+            item.querySelector('.decrease').addEventListener('click', () => updateQuantity(id, quantityInput, totalElement, -1));
+            item.querySelector('.remove-item').addEventListener('click', (e) => {
+                e.preventDefault();
+                item.remove();
+                updateLocalStorage(id, 0);
+                updateCartTotal();
+            });
+        });
+
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+            for (const id in cart) {
+                if (cart[id] > 0) {
+                    const item = document.querySelector(`.cart-item[data-id='${id}']`);
+                    if (item) {
+                        const quantityInput = item.querySelector('.quantity-input');
+                        quantityInput.value = cart[id];
+                        const totalElement = item.querySelector('.product-total');
+                        updateTotal(id, cart[id], totalElement);
+                    }
+                }
+            }
+            updateCartTotal();
+        }
+
+        function initializeLocalStorage(id, quantity) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+            if (!cart[id]) {
+                // تعيين الكمية الافتراضية إلى 1 عند إضافة عنصر جديد
+                cart[id] = 1;
+            } else {
+                cart[id] = parseInt(quantity);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateQuantity(id, quantityInput, totalElement, change) {
+            let quantity = Math.max(1, parseInt(quantityInput.value) + change);
+            quantityInput.value = quantity;
+            updateTotal(id, quantity, totalElement);
+            updateLocalStorage(id, quantity);
+        }
+
+        function updateTotal(id, quantity, totalElement) {
+            const price = parseFloat(totalElement.dataset.price);
+            const newTotal = price * quantity;
+            totalElement.textContent = newTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            updateCartTotal();
+        }
+
+        function updateLocalStorage(id, quantity) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+            if (quantity > 0) {
+                cart[id] = quantity;
+            } else {
+                delete cart[id];
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateCartTotal() {
+            const totals = document.querySelectorAll('.product-total');
+            const subtotal = Array.from(totals).reduce((acc, total) => acc + parseFloat(total.textContent.replace(/[^0-9.-]+/g, "")), 0);
+            document.getElementById('cart-subtotal').textContent = subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            document.getElementById('cart-total').textContent = subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        }
+    });
+</script>

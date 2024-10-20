@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Landing.PL.Areas.Dashboard.ViewModels.BlogFormVM>
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Blog</h1>
+                    <p><a asp-controller="Shop" asp-action="Index" class="btn btn-secondary me-2">Shop Now</a>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="hero-img-wrap">
+                    <img src="~/images/couch.png" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+<!-- Start Blog Section -->
+<div class="blog-section">
+    <div class="container">
+        <div class="row">
+            @foreach (var blog in Model)
+            {
+                <div class="col-12 col-sm-6 col-md-4 mb-5">
+                    <div class="post-entry">
+                        <a asp-controller="Blog" asp-action="Details" asp-route-id="@blog.Id" class="post-thumbnail">
+                            <img src="~/files/images/@blog.ImageName" alt="Image" class="img-fluid">
+                        </a>
+                        <div class="post-content-entry">
+                            <h3><a asp-controller="Blog" asp-action="Details" asp-route-id="@blog.Id">@blog.Name</a></h3>
+                            <div class="meta">
+                                <span>by <a href="#">@blog.CreatedBy</a></span>
+                                <span>on @blog.CreatedAt.ToShortDateString()</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- End Blog Section -->

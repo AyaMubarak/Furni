@@ -1,0 +1,104 @@
+﻿@model ShopFormVM
+
+@section Header {
+    Shops Edit
+}
+
+<div class="col-md-12">
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Edit Shops</h3>
+        </div>
+        <form asp-action="Edit" asp-controller="Shops" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="form-group">
+                    <input type="hidden" asp-for="Id" />
+                    <label asp-for="Name">Enter Shop Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter Shop Name" required />
+                </div>
+                <div class="form-group">
+                   
+                    <label asp-for="Price">Enter Shop Price</label>
+                    <input asp-for="Price" class="form-control" placeholder="Enter Shop Price" required />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description">Enter Shop Description</label>
+                    <textarea name="Description" id="editor" hidden>@Html.Raw(Model.Description)</textarea> <!-- Populate with existing description -->
+                    <div id="ck-editor" style="height: 200px;"></div>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+               
+                <div class="form-group">
+                    <label asp-for="IsDeleted"></label>
+                    <input asp-for="IsDeleted" type="checkbox" />
+                    <span>@(Model.IsDeleted ? "Deleted" : "Active")</span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Image">Enter Shop Image</label>
+                    <input asp-for="Image" class="form-control-file imageInput" accept="image/*" required />
+                </div>
+
+                <div class="form-group">
+                    <img src="#" alt="Image Preview" style="display: none; width: 100px;" id="imagePreview" />
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Edit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Script {
+    <!-- Include CKEditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize CKEditor
+            ClassicEditor
+                .create(document.querySelector('#ck-editor'))
+                .then(editor => {
+                    // Set existing description if editing
+                    const existingDescription = document.querySelector("#editor").value;
+                    if (existingDescription) {
+                        editor.setData(existingDescription); // Set the existing content in the editor
+                    } else {
+                        // Optional: Set a placeholder if no description exists
+                        editor.setData('<p>Enter Shop Description</p>'); // Change this as needed
+                    }
+
+                    // Update hidden input on form submit
+                    document.querySelector("form").addEventListener("submit", function (event) {
+                        editor.save().then(data => {
+                            document.querySelector("#editor").value = data; // Update hidden input
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            // Image preview functionality
+            document.querySelector(".imageInput").addEventListener("change", (event) => {
+                const file = event.target.files[0];
+                const imagePreview = document.querySelector("#imagePreview");
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = "block";
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = "none";
+                }
+            });
+        });
+    </script>
+}
+
