@@ -1,3 +1,4 @@
+using Landing.PL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -108,4 +109,74 @@ public class AccountController : Controller
         }
         return RedirectToAction("Index", "Home");
     }
+    public IActionResult ForgetPassword()
+    {
+        return View();
+    }
+    public async Task<IActionResult> SendRestPasswordUrl(ForgetPassword model)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var resetPasswordUrl = Url.Action("ResetPassword", "Account", new { token = token, email = model.Email }, "https", "localhost:44304");
+
+                var email = new Email
+                {
+                    Subject = "Reset Password",
+                    Recivers = model.Email,
+                    Body = $"Please reset your password by clicking the following link: {resetPasswordUrl}"
+                };
+
+                EmailSettings.SendEmail(email);
+            }
+        }
+
+        return View("ForgetPassword", model);
+    }
+    // GET: /Account/ResetPassword
+    [HttpGet]
+    public IActionResult ResetPassword(string token, string email)
+    {
+        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+        {
+            return RedirectToAction("Error", "Home"); // Handle invalid token or email
+        }
+
+        return View(new ResetPasswordViewModel { Token = token, Email = email });
+    }
+
+    // POST: /Account/ResetPassword
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ResetPasswordConfirmation", "Account");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+        }
+
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult ResetPasswordConfirmation()
+    {
+        return View();
+    }
 }
+
